@@ -8,7 +8,7 @@ terraform {
   }
 }
 variable "VM_COUNT" {
-  default = 3
+  default = 4
   type = number
 }
 
@@ -37,6 +37,12 @@ variable "VM_CIDR_RANGE" {
   type = string
 }
 
+variable "VM_TASK" {
+  default = ["dns", "loadbalancer", "webserver1", "webserver2"]
+  type = list(string)
+}
+
+
 # instance the provider
 provider "libvirt" {
   uri = "qemu:///system"
@@ -49,9 +55,6 @@ data "template_file" "user_data" {
   }
 }
 
-data "template_file" "network_config" {
-  template = file("${path.module}/network_config.cfg")
-}
 
 resource "libvirt_pool" "vm" {
   name = "${var.VM_HOSTNAME}_pool"
@@ -73,7 +76,7 @@ resource "libvirt_network" "vm_public_network" {
    domain = "${var.VM_HOSTNAME}.local"
    addresses = ["${var.VM_CIDR_RANGE}"]
    dhcp {
-    enabled = true
+    enabled = false
    }
    dns {
     enabled = true
@@ -83,7 +86,6 @@ resource "libvirt_network" "vm_public_network" {
 resource "libvirt_cloudinit_disk" "cloudinit" {
   name           = "${var.VM_HOSTNAME}_cloudinit.iso"
   user_data      = data.template_file.user_data.rendered
-  network_config = data.template_file.network_config.rendered
   pool           = libvirt_pool.vm.name
 }
 
@@ -97,7 +99,7 @@ resource "random_string" "vm-name" {
 
 resource "libvirt_domain" "vm" {
   count  = var.VM_COUNT
-  name   = "${var.VM_HOSTNAME}-${count.index}-${random_string.vm-name.result}"
+  name   = "${var.VM_HOSTNAME}-${var.VM_TASK[count.index]}"
   memory = "1024"
   vcpu   = 1
 
@@ -108,6 +110,7 @@ resource "libvirt_domain" "vm" {
     #network_id = "6d8e2494-835d-4baf-a14f-3a5c705febcc"
     #network_name = "vm_docker_network"
     network_name = "${libvirt_network.vm_public_network.name}"
+    addresses      = ["10.0.0.${count.index+100}"]
   }
   
   console {
