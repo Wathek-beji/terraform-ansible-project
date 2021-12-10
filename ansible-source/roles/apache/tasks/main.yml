@@ -1,0 +1,12 @@
+  - name: Install Apache
+    yum: pkg=httpd state=latest
+  - name: Copying the demo file
+    template: src={{index_path}} dest=/var/www/html/index.html
+              owner=apache group=apache mode=0644
+    notify:
+    - restart apache
+  - name: Enable Apache on System Boot
+    service: name=httpd enabled=yes
+
+    notify:
+    - start apache

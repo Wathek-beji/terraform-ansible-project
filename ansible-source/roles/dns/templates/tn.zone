@@ -1,0 +1,14 @@
+$TTL 1D
+@       IN SOA  wathekbeji.tn. root.tn. (
+                                        2020030101      ; serial
+                                        1D              ; refresh
+                                        1H              ; retry
+                                        1W              ; expire
+                                        3H )            ; minimum
+;
+@       IN NS   dns.wathekbeji.tn.
+;
+dns.wathekbeji IN A 10.0.0.100
+wathekbeji     IN A    10.0.0.101
+webserver1    IN A    10.0.0.102
+webserver2    IN A    10.0.0.103

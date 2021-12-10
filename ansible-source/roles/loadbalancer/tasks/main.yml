@@ -1,0 +1,10 @@
+  - name: Install Haproxy
+    yum: pkg=haproxy state=latest
+  - name: Copying the demo file
+    template: src=haproxy.cfg dest=/etc/haproxy/haproxy.cfg
+    notify:
+    - restart haproxy
+  - name: Enable haproxy on System Boot
+    service: name=haproxy enabled=yes
+    notify:
+    - start haproxy

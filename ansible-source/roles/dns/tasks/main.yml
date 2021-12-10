@@ -1,0 +1,16 @@
+  - name: Install Bind
+    yum: pkg=bind state=latest
+  - name: Install Bind-utils
+    yum: pkg=bind-utils state=latest
+  - name: Copying the conf file
+    template: src=named.conf dest=/etc/named.conf
+  - name: Copying the zone file
+    template: src=tn.zone dest=/var/named/tn.zone
+    notify:
+    - restart named
+  - name: Enable Bind on System Boot
+    service: name=named enabled=yes
+    notify:
+    - start named
+
+

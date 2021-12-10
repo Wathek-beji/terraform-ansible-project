@@ -1,0 +1,27 @@
+---
+ - hosts: nameserver
+  
+   become: yes  
+
+   become_user: root  
+
+   roles:
+   - dns
+
+ - hosts: webservers
+
+   become: yes
+
+   become_user: root
+
+   roles:
+   - apache
+
+ - hosts: loadbalancer
+
+   become: yes
+
+   become_user: root
+
+   roles:
+   - loadbalancer

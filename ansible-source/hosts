@@ -1,0 +1,10 @@
+[webservers]
+10.0.0.102 index_path=index1.html
+10.0.0.103 index_path=index2.html
+
+[nameserver]
+10.0.0.100
+
+[loadbalancer]
+10.0.0.101
+
