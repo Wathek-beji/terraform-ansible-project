@@ -10,8 +10,8 @@ The code and configurations for the infrastructure provisioning is found under t
 ## Config management
 
 The ansible playbook config-resources.yml under ansible-source triggers the execution of 3 roles
-1/dns: deploys a bind dns server
-2/apache: deploys a apache http server
-3/loadbalancer: deploys a haproxy loadbalancer
+1/dns: deploys a bind dns server.
+2/apache: deploys a apache http server.
+3/loadbalancer: deploys a haproxy loadbalancer.
 
 
